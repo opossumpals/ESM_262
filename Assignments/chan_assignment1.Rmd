@@ -1,0 +1,10 @@
+---
+title: "chan_assignment1"
+author: "Delores Chan"
+date: "2024-02-14"
+output: html_document
+---
+
+## 1. Why do you want to take this course? 
+
+## 2. What do you hope to get out of this class? 
