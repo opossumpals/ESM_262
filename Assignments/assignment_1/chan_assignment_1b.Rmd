@@ -1,0 +1,12 @@
+---
+title: "chan_assignment_1b"
+author: "Delores Chan"
+date: "2024-02-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## link to model: https://miro.com/app/board/uXjVNtd33rc=/ 
