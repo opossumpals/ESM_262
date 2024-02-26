@@ -7,24 +7,36 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggplot2)
+library(purrr)
 ```
 
-## R Markdown
+## assignment page: https://louisgraup.github.io/ESM_262_Programming/topic_5_resource.html
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+# bring in autopower function
+source("C:/Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R")
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Add an additional super light car with mass 5,000 kg and a surface area 10m2
+```{r}
+# from looping.rmd: generate a structure to store info on our possible cars, add an additional car
+possible_cars = data.frame(name = c("A","B","C", "D"),mass=c(10000,65000,38000, 5000), area = c(22,30,22, 10))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Compute the mean and maximum power for Cars A, B, C and for your new car, assuming that average highway speed is 80 km/hr with a standard deviation of 10km/hr; Use 2 different methods to compute the mean and maximum power for each car type; a) FOR loop and b) the pmap function from purr
+```{r}
+# using a for loop to calculate the mean power for each car 
+mean_func <- function(v=80, m, A) {
+  mean_power = autopower()
+}
+```
+
+
+
+
+
+
