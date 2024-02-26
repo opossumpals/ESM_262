@@ -15,7 +15,7 @@ library(ggplot2)
 
 
 ```{r}
-source(Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R)
+source("C:/Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R")
 ```
 
 ## assignment page: https://louisgraup.github.io/ESM_262_Programming/topic_3_resource.html
