@@ -1,0 +1,129 @@
+---
+title: "chan_assignment2"
+author: "Delores Chan"
+date: "2024-02-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ggplot2)
+```
+
+
+```{r}
+source(Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R)
+```
+
+## assignment page: https://louisgraup.github.io/ESM_262_Programming/topic_3_resource.html
+
+
+## 1. Write a function to compute power, given a truck of m=31752 kg (parameters for a heavy truck) for a range of different highway speeds (30 m/s, 80 km/hr, 120 km/h, 40 km/hr, 5 km/hr). Surface area of the truck is 16m^2. 
+
+```{r}
+power_30_ms <- autopower(V=30, m=31752, A=16)
+power_30_ms
+```
+
+```{r}
+# 80 km/hr is 22 m/s
+power_80_kmhr <- autopower(V=22, m=31752, A=16)
+power_80_kmhr
+```
+
+```{r}
+# 1210 km/hr is 33 m/s
+power_120_kmhr <- autopower(V=33, m=31752, A=16)
+power_120_kmhr
+```
+
+```{r}
+# 40 km/hr is 11 m/s
+power_40_kmhr <- autopower(V=11, m=31752, A=16)
+power_40_kmhr
+```
+
+```{r}
+# 5 km/hr is 1.4 m/s
+power_5_kmhr <- autopower(V=1.4, m=31752, A=16)
+power_5_kmhr
+```
+
+```{r}
+# create df for power and speed 
+speed_power <- data.frame(speed=c(30, 80, 120, 40, 5), power=c(power_30_ms, power_80_kmhr, power_120_kmhr, power_40_kmhr, power_5_kmhr))
+
+
+speed_power
+```
+
+
+```{r}
+# plot power as a function of speed
+power_speed_gg <- ggplot(data=speed_power, mapping=aes(x=power, y=speed)) +
+  geom_point() +
+  geom_line() + 
+  labs(title="Vehicle power as a Function of Speed")
+
+power_speed_gg
+```
+
+
+## recalculating with a lighter vehicle
+```{r}
+light_power_30_ms <- autopower(V=30, m=15000, A=16)
+light_power_30_ms
+```
+
+```{r}
+# 80 km/hr is 22 m/s
+light_power_80_kmhr <- autopower(V=22, m=15000, A=16)
+light_power_80_kmhr
+```
+
+```{r}
+# 1210 km/hr is 33 m/s
+light_power_120_kmhr <- autopower(V=33, m=15000, A=16)
+light_power_120_kmhr
+```
+
+```{r}
+# 40 km/hr is 11 m/s
+light_power_40_kmhr <- autopower(V=11, m=15000, A=16)
+light_power_40_kmhr
+```
+
+```{r}
+# 5 km/hr is 1.4 m/s
+light_power_5_kmhr <- autopower(V=1.4, m=15000, A=16)
+light_power_5_kmhr
+```
+
+
+
+```{r}
+# create df for power and speed with a lighter vehicle 
+light_speed_power <- data.frame(speed=c(30, 80, 120, 40, 5), power=c(light_power_30_ms, light_power_80_kmhr, light_power_120_kmhr, light_power_40_kmhr, light_power_5_kmhr))
+
+
+light_speed_power
+```
+
+
+
+```{r}
+# data frame for both vehicles 
+
+vehicles_power_speed_gg <- ggplot() +
+  geom_point(data=speed_power, aes(power, speed), col="blue", size=2) + 
+  geom_line(data=speed_power, aes(power, speed), col="blue", size=1) +
+  geom_point(data=light_speed_power, aes(power, speed), col="red", size=2) +
+  geom_line(data=light_speed_power, aes(power, speed), col="red", size=1) +
+  labs(title="Vehicle power as a Function of Speed")
+
+vehicles_power_speed_gg
+```
+
