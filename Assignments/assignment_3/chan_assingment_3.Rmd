@@ -25,14 +25,34 @@ source("C:/Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R")
 ```{r}
 # from looping.rmd: generate a structure to store info on our possible cars, add an additional car
 possible_cars = data.frame(name = c("A","B","C", "D"),mass=c(10000,65000,38000, 5000), area = c(22,30,22, 10))
+
+#converting average speed 
+speed_base <- 80*.28 
+
+possible_cars$power = autopower(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
+
+head(possible_cars)
+
+#mean_speed <- 80 
+
+#nspeeds<- 500
+
+#speeds <- rlnorm(mean=mean_speed, sd=0.1*mean_speed, nspeeds)
+
+#summary(speeds)
 ```
 
 ## Compute the mean and maximum power for Cars A, B, C and for your new car, assuming that average highway speed is 80 km/hr with a standard deviation of 10km/hr; Use 2 different methods to compute the mean and maximum power for each car type; a) FOR loop and b) the pmap function from purr
 ```{r}
 # using a for loop to calculate the mean power for each car 
-mean_func <- function(v=80, m, A) {
-  mean_power = autopower()
+mean_func <- function() {
+   for (i in 1:nrow(possible_cars)) {
+  power_all3[,i] = autopower(V=80, m=possible_cars$mass[i], A=possible_cars$area[i])
+   }
+  return(power_all3)
 }
+
+mean_func()
 ```
 
 

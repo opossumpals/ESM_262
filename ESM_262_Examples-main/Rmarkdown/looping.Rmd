@@ -138,8 +138,6 @@ head(powerallr1)
 method1_plot = ggplot(powerallr1, aes(car,power, fill=car))+geom_boxplot()+ggtitle("By Hand")
 method1_plot
 
-
-
 ```
 
 # Second using R built in tools
