@@ -70,11 +70,12 @@ head(power_all_cars_mean)
 colnames(power_all_cars_mean)=possible_cars$name
 ```
 
-## Calculating max power using a for loop  
+### Calculating max power using a for loop  
 ```{r}
 # new data frame to store max power
- # we've forund the mean power over a range of speeds, now we find max of each car over our 300 iterations 
-power_all_cars_max <- as.data.frame(matrix(nrow = length(speeds), ncol = nrow(possible_cars)))
+ # we've found the mean power over a range of speeds, now we find max of each car over our 300 iterations 
+ # only one row because it is the same max speed across the 300 
+power_all_cars_max <- as.data.frame(matrix(nrow = 1, ncol = nrow(possible_cars)))
 ```
 
 ```{r}
@@ -92,29 +93,7 @@ head(power_all_cars_max)
 ```
 
 
-# Using pmap to calculate mean power 
-```{r}
-### recall
-#possible_cars = data.frame(name = c("A","B","C","D"),mass=c(10000,65000,38000, 5000), area = c(22,30,22, 10))
-
-# converting average speed 
-# recall our function needs speed in m/s not km/hr so we will also do a conversion
-#speed_base <- 80*.28 
-
-#possible_cars$power = autopower(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
-
-#head(possible_cars)
-
-
-# computing and converting average speed with sd 
-#mean_speed <- log(speed_base) 
-
-#nspeeds<- 300
-
-#speeds <- rlnorm(mean=mean_speed, sd=0.1*mean_speed, nspeeds)
-
-#summary(speeds)
-```
+### Using pmap to calculate mean power 
 
 ```{r}
 # pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
@@ -122,5 +101,65 @@ power_all_cars_mean2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), 
 
 # turn this into a df 
 power_all_cars_mean2 <- as.data.frame(power_all_cars_mean2, col.names=possible_cars$name)
+```
+
+
+### Using pmap to calculate max power 
+```{r}
+# pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
+power_all_cars_max2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=max(speeds))
+
+# turn this into a df 
+power_all_cars_max2 <- as.data.frame(power_all_cars_max2, col.names=possible_cars$name)
+```
+
+
+
+
+## Create two boxplots (one for each method (FOR and pmap)) that show the range of power consumption (across sampled speeds) for each car type.
+
+```{r}
+# for loop box plot
+
+# clean up data frames
+colnames(power_all_cars_mean)=possible_cars$name
+head(power_all_cars_mean)
+
+cleaned_power_all_cars = power_all_cars_mean %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(cleaned_power_all_cars)
+
+colnames(power_all_cars_max)=possible_cars$name
+head(power_all_cars_max)
+cleaned_max_power = power_all_cars_max %>%  pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(cleaned_max_power)
+
+
+# mean plot
+for_mean_plot <- ggplot(cleaned_power_all_cars, aes(car, power, fill = car)) +
+  geom_boxplot() +
+  ggtitle("Using for loop to calculate average power")
+
+for_mean_plot
+```
+
+```{r}
+# pmap box plot
+
+# clean up data frames
+colnames(power_all_cars_mean2)=possible_cars$name
+head(power_all_cars_mean2)
+cleaned_power_all_cars2 = power_all_cars_mean2 %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(cleaned_power_all_cars2)
+
+
+# plot
+pmap_plot = ggplot(cleaned_power_all_cars2, aes(car,power, fill=car))+geom_boxplot()+ggtitle("Using pmap to calculate average power")
+pmap_plot
+```
+
+
+
+```{r}
+ggarrange(for_mean_plot, pmap_plot)
 ```
 
