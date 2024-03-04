@@ -38,7 +38,7 @@ Mean highway speed is 100 km/hr
 
 ```{r sampling2, eval=TRUE, echo=TRUE}
 
-source("../R/autopower.R")
+source("C:/Users/delor/OneDrive/Desktop/ESM_262/R/fuel_effic.R")
 # generate a structure to store info on our possible cars
 possible_cars = data.frame(name = c("A","B","C"),mass=c(10000,65000,38000), area = c(22,30,22))
 
