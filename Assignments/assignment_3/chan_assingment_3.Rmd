@@ -94,6 +94,33 @@ head(power_all_cars_max)
 
 # Using pmap to calculate mean power 
 ```{r}
+### recall
+#possible_cars = data.frame(name = c("A","B","C","D"),mass=c(10000,65000,38000, 5000), area = c(22,30,22, 10))
 
+# converting average speed 
+# recall our function needs speed in m/s not km/hr so we will also do a conversion
+#speed_base <- 80*.28 
+
+#possible_cars$power = autopower(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
+
+#head(possible_cars)
+
+
+# computing and converting average speed with sd 
+#mean_speed <- log(speed_base) 
+
+#nspeeds<- 300
+
+#speeds <- rlnorm(mean=mean_speed, sd=0.1*mean_speed, nspeeds)
+
+#summary(speeds)
+```
+
+```{r}
+# pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
+power_all_cars_mean2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=speeds)
+
+# turn this into a df 
+power_all_cars_mean2 <- as.data.frame(power_all_cars_mean2, col.names=possible_cars$name)
 ```
 
