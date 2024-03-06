@@ -1,0 +1,64 @@
+---
+title: "chan_assignment_4"
+author: "Delores Chan"
+date: "2024-03-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(purrr)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+# assignment page: https://louisgraup.github.io/ESM_262_Programming/topic_6_resource.html
+
+Write a function that takes a vector of fish names and always returns three items
+
+the most common fish,
+the rarest fish
+the total number of fish
+
+```{r}
+# bring in data and create and clean df
+
+fish <- read_lines(here("ESM_262_Examples-main", "Data", "fish.txt")) 
+fish <- fish[-1]
+
+source("C:/Users/delor/OneDrive/Desktop/ESM_262/R/fish_func.R")
+```
+
+```{r}
+all_fish <- fish_summary(fish)
+
+all_fish
+```
+
+```{r}
+# challenge: what if we had multiple catches 
+
+possible.fish = c("salmon","steelhead","shark","tuna","cod") # this is always the same 
+
+ndays=10 # days sampled 
+
+catches = round(runif(min=3, max=400, n=ndays)) # sample of catches 
+
+catch = sample(x = possible.fish, size=catches[1], replace=TRUE) # pmap does this multiple times 
+
+catches_res =list(catches) %>%  pmap(sample, x=possible.fish, replace=TRUE) # pmap passes it through the function 
+
+catch_summary = fish_summary(catches_res[[1]]) 
+
+catch_summary
+```
+
+```{r}
+# ok so how do we get the summary (rarest fish, number of fish for all catches in catch_res)?
+catches_res_total <- unlist(catches_res)
+total_catch_summary = fish_summary(catches_res_total)
+total_catch_summary
+```
+
+
