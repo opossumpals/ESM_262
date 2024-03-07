@@ -98,9 +98,11 @@ head(power_all_cars_max)
 ```{r}
 # pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
 power_all_cars_mean2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=speeds)
+power_all_cars_mean2
 
 # turn this into a df 
 power_all_cars_mean2 <- as.data.frame(power_all_cars_mean2, col.names=possible_cars$name)
+power_all_cars_mean2
 ```
 
 
