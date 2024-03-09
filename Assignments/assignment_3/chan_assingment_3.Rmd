@@ -12,6 +12,11 @@ library(here)
 library(janitor)
 library(ggplot2)
 library(purrr)
+
+if (!requireNamespace("gridExtra", quietly = TRUE)) {
+  install.packages("gridExtra")
+}
+library(gridExtra)
 ```
 
 ## assignment page: https://louisgraup.github.io/ESM_262_Programming/topic_5_resource.html
@@ -31,7 +36,7 @@ possible_cars = data.frame(name = c("A","B","C","D"),mass=c(10000,65000,38000, 5
 # recall our function needs speed in m/s not km/hr so we will also do a conversion
 speed_base <- 80*.28 
 
-possible_cars$power = autopower(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
+possible_cars$power = fuel_effic(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
 
 head(possible_cars)
 
@@ -58,10 +63,28 @@ head(power_all_cars_mean)
 ```
 
 ```{r}
+# converting average speed 
+# recall our function needs speed in m/s not km/hr so we will also do a conversion
+speed_base <- 80*.28 
+
+possible_cars$power = fuel_effic(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
+
+head(possible_cars)
+
+
+# computing and converting average speed with sd 
+mean_speed <- log(speed_base) 
+
+nspeeds<- 300
+
+speeds <- rlnorm(mean=mean_speed, sd=0.1*mean_speed, nspeeds)
+
+summary(speeds)
+
 # using a for loop to calculate the mean power for each car 
 
    for (i in 1:nrow(possible_cars)) {
-  power_all_cars_mean[,i] = autopower(V=speeds, m=possible_cars$mass[i], A=possible_cars$area[i])
+  power_all_cars_mean[,i] = fuel_effic(A=possible_cars$area[i], m=possible_cars$mass[i], V=speeds)
    }
 
 
@@ -82,7 +105,7 @@ power_all_cars_max <- as.data.frame(matrix(nrow = 1, ncol = nrow(possible_cars))
 # Using a for loop to calculate the maximum power for each car
 
 for (i in 1:nrow(possible_cars)) {
-  power_all_cars_max[, i] = autopower(V = max(speeds), m = possible_cars$mass[i], A = possible_cars$area[i])
+  power_all_cars_max[, i] = fuel_effic(V = max(speeds), m = possible_cars$mass[i], A = possible_cars$area[i])
 }
 
 # Rename columns
@@ -96,8 +119,26 @@ head(power_all_cars_max)
 ### Using pmap to calculate mean power 
 
 ```{r}
+# converting average speed 
+# recall our function needs speed in m/s not km/hr so we will also do a conversion
+speed_base <- 80*.28 
+
+possible_cars$power = fuel_effic(V=speed_base, m=possible_cars$mass, A=possible_cars$area)
+
+head(possible_cars)
+
+
+# computing and converting average speed with sd 
+mean_speed <- log(speed_base) 
+
+nspeeds<- 300
+
+speeds <- rlnorm(mean=mean_speed, sd=0.1*mean_speed, nspeeds)
+
+summary(speeds)
+
 # pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
-power_all_cars_mean2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=speeds)
+power_all_cars_mean2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), V=speeds, fuel_effic)
 power_all_cars_mean2
 
 # turn this into a df 
@@ -109,7 +150,7 @@ power_all_cars_mean2
 ### Using pmap to calculate max power 
 ```{r}
 # pmap runs a function for each value in a list of parameters, with other parameters set for each iteration
-power_all_cars_max2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=max(speeds))
+power_all_cars_max2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), fuel_effic, V=max(speeds))
 
 # turn this into a df 
 power_all_cars_max2 <- as.data.frame(power_all_cars_max2, col.names=possible_cars$name)
@@ -162,6 +203,8 @@ pmap_plot
 
 
 ```{r}
-ggarrange(for_mean_plot, pmap_plot)
+#ggarrange(for_mean_plot, pmap_plot)
+
+grid.arrange(for_mean_plot, pmap_plot, ncol=2)
 ```
 

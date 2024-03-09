@@ -206,7 +206,7 @@ method2_plot
 
 # put plots side by side
 # to confirm that they look similar
-ggarrange(method1_plot, method2_plot)
+ ggarrange(method1_plot, method2_plot)
 
 # compare values
 head(powerallr2)
