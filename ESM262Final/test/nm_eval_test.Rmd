@@ -1,0 +1,128 @@
+---
+title: "nm_eval_test"
+author: "Delores Chan"
+date: "2024-03-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(janitor)
+library(dplyr)
+```
+
+
+
+```{r}
+# get functions
+source("C:/Users/delor/OneDrive/Desktop/ESM_262/ESM262Final/R/nm_eval.R")
+```
+
+```{r}
+# current presidential scenario 
+biden <- data.frame(party="Democrat", hist="Yes")
+
+# alternate presidential scenario 
+trump <- data.frame(party="Republican", hist="No")
+
+# all presidential scenarios for 2024-2028
+pres_sce <- data.frame(name = c("Biden", "Trump"), party = c("Democrat", "Republican"), hist = c("Yes", "No"))
+```
+
+
+```{r}
+# data of different national monuments
+molok_luyuk <- data.frame(acres = 13573, pub_int="Yes", activity="Yes", es=33)
+chuckwalla <- data.frame(acres = 660000, pub_int="Yes", activity="Yes", es = 35)
+sattitla <- data.frame(acres = 200000, pub_int="Yes", activity="Yes", es=31)
+san_gab <- data.frame(acres=109000, pub_int="yes", activity="Yes", es=38)
+
+
+# all potential california national monuments
+cali_nm <- data.frame(names = c("molok luyuk", "chuckwalla", "sattitla", "san gab"), 
+                      acres = c(13573, 660000, 200000, 109000), 
+                      pub_int = c("Yes", "Yes", "Yes", "Yes"),
+                      activity = c("Yes", "Yes", "Yes", "Yes"), 
+                      es = c(33, 35, 31, 38))
+
+```
+
+
+```{r}
+# using a for loop to calculate designation value
+
+#create new df for storing 
+all_cali_nm_desig_eval = data.frame(nrow="designation_value", ncol= "names")
+head(all_cali_nm_desig_eval)
+
+for (i in 1:nrow(cali_nm)) {
+  all_cali_nm_desig_eval[,i] = nm_desig_eval(acres = cali_nm$acres[i], pub_int = cali_nm$pub_int[i], activity = cali_nm$activity[i], es = cali_nm$es[i])
+}
+
+
+
+head(all_cali_nm_desig_eval)
+
+colnames(all_cali_nm_desig_eval)=cali_nm$names
+rownames(all_cali_nm_desig_eval)="area_rank"
+all_cali_nm_desig_eval <- as.data.frame(t(all_cali_nm_desig_eval)) #flips data frame
+```
+
+
+```{r}
+# use a for loop to calculate likelihood of designation
+
+#create new df for storing 
+all_cali_nm_likelihood = data.frame(nrow="likelihood", ncol= "names")
+head(all_cali_nm_likelihood)
+
+for (i in 1:nrow(all_cali_nm_desig_eval)) {
+  all_cali_nm_likelihood[,i] = likelihood(area_rank = all_cali_nm_desig_eval$area_rank[i], party = pres_sce$party[i], hist = pres_sce$hist[i])
+}
+
+#Error in if (party == "Democrat") { : 
+  #missing value where TRUE/FALSE needed
+
+head(all_cali_nm_likelihood)
+
+all_cali_nm_likelihood <- as.data.frame(all_cali_nm_likelihood, col.names = cali_nm$names, row.names=pres_sce$name)
+
+```
+
+
+```{r}
+# using pmap to calculate designation value
+
+all_cali_nm_desig_eval_2 = pmap(list(acres = cali_nm$acres, pub_int = cali_nm$pub_int, activity = cali_nm$activity, es = cali_nm$es), nm_desig_eval)
+
+all_cali_nm_desig_eval_2
+
+all_cali_nm_desig_eval_2 <- as.data.frame(all_cali_nm_desig_eval_2, col.names = cali_nm$names, row.names="area_rank")
+all_cali_nm_desig_eval_2 <- as.data.frame(t(all_cali_nm_desig_eval_2)) #flips data frame
+```
+
+
+```{r}
+#using pmap to calculate likelihood of designation 
+all_cali_nm_likelihood_2 = pmap(list(area_rank = all_cali_nm_desig_eval_2, party = pres_sce$party, hist = pres_sce$hist), likelihood)
+
+all_cali_nm_likelihood_2
+
+all_cali_nm_likelihood_2 <- as.data.frame(all_cali_nm_likelihood_2, col.names = pres_sce$name, row.names=cali_nm$names)
+all_cali_nm_likelihood_2 
+
+#pmap works for second function to calculate likelihood, having issues with the for loop
+```
+
+
+```{r}
+# box plot for pmap 
+all_cali_nm_desig_plot <- ggplot(all_cali_nm_likelihood_2 , aes(biden)) +
+  geom_point()
+all_cali_nm_desig_plot
+```
+
