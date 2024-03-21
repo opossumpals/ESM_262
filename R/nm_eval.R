@@ -132,3 +132,5 @@ likelihood = function(area_rank, party, hist) {
 
 
 ## The higher the total_score, the higher likelihood that an area will be designated as a National Monument. The lower the score, the less likely an area will be designated.
+
+

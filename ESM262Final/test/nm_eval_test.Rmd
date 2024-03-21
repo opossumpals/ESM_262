@@ -126,3 +126,7 @@ all_cali_nm_desig_plot <- ggplot(all_cali_nm_likelihood_2 , aes(biden)) +
 all_cali_nm_desig_plot
 ```
 
+```{r}
+help("nm_eval.R")
+```
+

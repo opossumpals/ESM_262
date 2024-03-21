@@ -11,9 +11,12 @@ library(devtools)
 #test_file("name") runs all the tests in a file called "name"
 
 
-source("R/nm_eval.R")
+source("ESM262Final/R/nm_eval.R")
 
 test_that("Democrat input = 1", {
   expect_equal(likelihood(party = "Democrat"), 1)
   expect_equal(likelihoos(hist = "Yes"), 1)
 })
+
+
+test_file(nm_eval_test.Rmd)
