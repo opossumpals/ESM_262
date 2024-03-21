@@ -1,5 +1,7 @@
 
+library(usethis)
 
+usethis::use_package(ESM262Final)
 
 # current presidential scenario
 biden <- data.frame(party="Democrat", hist="Yes")
@@ -28,5 +30,4 @@ cali_nm <- data.frame(names = c("molok luyuk", "chuckwalla", "sattitla", "san ga
                       es = c(33, 35, 31, 38))
 
 
-
-use_data(biden, pkg="ESM262Final")
+write.csv(cali_nm, "data")

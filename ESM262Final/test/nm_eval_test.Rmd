@@ -48,7 +48,6 @@ cali_nm <- data.frame(names = c("molok luyuk", "chuckwalla", "sattitla", "san ga
                       pub_int = c("Yes", "Yes", "Yes", "Yes"),
                       activity = c("Yes", "Yes", "Yes", "Yes"), 
                       es = c(33, 35, 31, 38))
-
 ```
 
 
@@ -127,6 +126,12 @@ all_cali_nm_desig_plot
 ```
 
 ```{r}
-help("nm_eval.R")
+
+library(ESM262Final)
+```
+
+
+```{r}
+data(biden)
 ```
 
