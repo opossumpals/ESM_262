@@ -3,9 +3,8 @@ Type: Package
 Title: National Monument Evaluation Matrix
 Version: 0.1.0
 Author: Delores Chan 
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: The package maintainer <deloresjchan@ucsb.edu>
+Description: An evaluation matrix for whether an area is likely to be designated as a national monument. Takes into account acreage, public involvement, presidential scenarios, and presence of endangered species. 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
